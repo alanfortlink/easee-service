@@ -9,7 +9,7 @@ function getLongitude() {
 }
 
 function getPrice() {
-    return parseInt((Math.random() * 5));
+    return 3 + parseInt((Math.random() * 2));
 }
 
 const _allPlaces = [{
