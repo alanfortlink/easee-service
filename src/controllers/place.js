@@ -2,6 +2,42 @@ const mongoose = require('mongoose');
 const Place = mongoose.model('Place');
 const Review = mongoose.model('Review');
 
+let Service2Type = {
+    "wifi": 1,
+    "estacionamento": 2,
+    "comida": 3,
+    "seguranca": 4,
+    "preco": 5,
+};
+
+let Type2Service = {};
+for (service in Service2Type) Type2Service[Service2Type[service]] = service;
+
+function getDistance(lat1, lon1, lat2, lon2, unit) {
+    if ((lat1 == lat2) && (lon1 == lon2)) {
+        return 0;
+    } else {
+        var radlat1 = Math.PI * lat1 / 180;
+        var radlat2 = Math.PI * lat2 / 180;
+        var theta = lon1 - lon2;
+        var radtheta = Math.PI * theta / 180;
+        var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+        if (dist > 1) {
+            dist = 1;
+        }
+        dist = Math.acos(dist);
+        dist = dist * 180 / Math.PI;
+        dist = dist * 60 * 1.1515;
+        if (unit == "K") {
+            dist = dist * 1.609344
+        }
+        if (unit == "N") {
+            dist = dist * 0.8684
+        }
+        return dist;
+    }
+}
+
 function getProcessedPlace(place, places, origin) {
     return new Promise((resolve, reject) => {
         Review.find({
@@ -14,28 +50,37 @@ function getProcessedPlace(place, places, origin) {
 
             if (reviews == null) reviews = [];
 
-            //TODO: Calculate distance
-            const distance = 0;
-            //TODO: Calculate rating from reviews accumulation
-            const rating = 0;
-            //TODO: Calculate price
-            const price = 0;
-            //TODO: Calculate rating from reviews accumulation
+            const distance = getDistance(place.latitude, place.longitude, origin.latitude, origin.longitude, 'K');
+
+            let accByService = {};
+            let totalByService = {};
+
+            reviews.forEach((review) => {
+                review.ratings.forEach((rating) => {
+                    if (!accByService[rating.id])
+                        accByService[rating.id] = 0;
+                    if (!totalByService[rating.id])
+                        totalByService[rating.id] = 0;
+
+                    accByService[rating.id] += rating.rating;
+                    totalByService[rating.id] += 1;
+                });
+            });
+
+            let services = [];
+
+            for (type in accByService) {
+                services.push({
+                    type: type,
+                    name: Type2Service[type],
+                    rating: accByService[type] / totalByService[type]
+                });
+            }
+
+            const rating = services.map(s => s.rating).reduce((a, b) => a + b, 0) /
+                services.length;
+
             const numEvaluations = reviews.length;
-            //TODO: Calculate rating from reviews accumulation
-            const services = [{
-                type: 1,
-                name: "Wifi",
-                rating: 4
-            }, {
-                type: 2,
-                name: "Estacionamento",
-                rating: 4
-            }, {
-                type: 3,
-                name: "Banho",
-                rating: 4
-            }];
 
             const metadata = [{
                 message: "Para detalhes: ",
@@ -50,7 +95,7 @@ function getProcessedPlace(place, places, origin) {
                 latitude: place.latitude,
                 longitude: place.longitude,
                 rating,
-                price,
+                price: place.price,
                 numEvaluations,
                 services,
                 metadata,
@@ -59,7 +104,7 @@ function getProcessedPlace(place, places, origin) {
             if (places != null) places.push(processedItem);
             resolve(processedItem);
         }, (err) => {
-            //TODO: Handle error.
+            reject(err);
         });
     });
 }
@@ -140,9 +185,10 @@ function resetPlaces() {
     return new Promise((resolve, reject) => {
         Place.deleteMany({}, () => {
             Place.insertMany([{
-                "name": "Loja 1",
-                "latitude": 1.0,
-                "longitude": 2.0
+                name: "Loja 1",
+                latitude: 1.0,
+                longitude: 2.0,
+                price: 5,
             }], (err, places) => {
                 if (err) reject(err);
                 resolve(places);
@@ -163,7 +209,6 @@ function resetReviews(places) {
                 return;
             }
 
-            //TODO: Change 0 to a real driver's id.
             Review.insertMany([{
                 driverId: "0",
                 placeId: places[0]._id,
@@ -222,7 +267,6 @@ exports.rate = (req, res, next) => {
     const driverId = req.body.driverId;
     const ratings = req.body.ratings;
 
-    //TODO: There must be a insertOne
     Review.insertMany([{
         placeId,
         driverId,

@@ -16,6 +16,11 @@ const placeModel = new Schema({
         type: Number,
         required: true,
         trim: true
+    },
+    price: {
+        type: Number,
+        required: true,
+        trim: true
     }
 });
 
