@@ -126,14 +126,15 @@ function getProcessedPlaces(data, origin) {
 
 exports.listPlaces = (req, res, next) => {
     let origin = {
-        latitude: 0,
-        longitude: 0
+        latitude: req.body['latitude'],
+        longitude: req.body['longitude']
     };
 
     Place
         .find({})
         .then((data) => {
             getProcessedPlaces(data, origin).then((processedData) => {
+                processedData = processedData.sort((a, b) => a.distance - b.distance);
                 res.status(200).send(processedData);
             }, (err) => {
                 res.status(500).send({
@@ -189,6 +190,11 @@ function resetPlaces() {
                 latitude: 1.0,
                 longitude: 2.0,
                 price: 5,
+            },{
+                name: "Loja 2",
+                latitude: 1.5,
+                longitude: 2.0,
+                price: 2,
             }], (err, places) => {
                 if (err) reject(err);
                 resolve(places);
@@ -227,6 +233,25 @@ function resetReviews(places) {
                 }, {
                     type: 5,
                     rating: 5
+                }],
+            },{
+                driverId: "0",
+                placeId: places[1]._id,
+                ratings: [{
+                    type: 1,
+                    rating: 4
+                }, {
+                    type: 2,
+                    rating: 1
+                }, {
+                    type: 3,
+                    rating: 2
+                }, {
+                    type: 4,
+                    rating: 3
+                }, {
+                    type: 5,
+                    rating: 1
                 }],
             }], (err, reviews) => {
                 if (err) {

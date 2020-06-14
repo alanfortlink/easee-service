@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/place');
 
-router.get('', controller.listPlaces);
+router.post('', controller.listPlaces);
 router.get('/place/:id', controller.listPlace);
 
 router.get('/reset', controller.reset);
