@@ -17,10 +17,11 @@
   },
   "homepage": "https://github.com/alanfortlink/ccr-service#readme",
   "dependencies": {
-    "normalize-port": "^1.0.0",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "http": "0.0.0",
-    "mongoose": "^5.7.9"
+    "mongoose": "^5.7.9",
+    "nodemon": "^2.0.4",
+    "normalize-port": "^1.0.0"
   }
 }
