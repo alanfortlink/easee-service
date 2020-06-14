@@ -57,13 +57,13 @@ function getProcessedPlace(place, places, origin) {
 
             reviews.forEach((review) => {
                 review.ratings.forEach((rating) => {
-                    if (!accByService[rating.id])
-                        accByService[rating.id] = 0;
-                    if (!totalByService[rating.id])
-                        totalByService[rating.id] = 0;
+                    if (!accByService[rating.type])
+                        accByService[rating.type] = 0;
+                    if (!totalByService[rating.type])
+                        totalByService[rating.type] = 0;
 
-                    accByService[rating.id] += rating.rating;
-                    totalByService[rating.id] += 1;
+                    accByService[rating.type] += rating.rating;
+                    totalByService[rating.type] += 1;
                 });
             });
 
