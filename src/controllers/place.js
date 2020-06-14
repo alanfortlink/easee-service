@@ -1,13 +1,16 @@
 const mongoose = require('mongoose');
+const DB = require('../models/db');
 const Place = mongoose.model('Place');
 const Review = mongoose.model('Review');
 
 let Service2Type = {
-    "wifi": 1,
-    "estacionamento": 2,
-    "comida": 3,
-    "seguranca": 4,
-    "preco": 5,
+    "Wifi": 1,
+    "Banho": 2,
+    "Comida": 3,
+    "Estacionamento": 4,
+    "Pernoite": 5,
+    "Oficina": 6,
+    "Saúde": 7,
 };
 
 let Type2Service = {};
@@ -185,17 +188,7 @@ exports.listPlace = (req, res, next) => {
 function resetPlaces() {
     return new Promise((resolve, reject) => {
         Place.deleteMany({}, () => {
-            Place.insertMany([{
-                name: "Loja 1",
-                latitude: 1.0,
-                longitude: 2.0,
-                price: 5,
-            },{
-                name: "Loja 2",
-                latitude: 1.5,
-                longitude: 2.0,
-                price: 2,
-            }], (err, places) => {
+            Place.insertMany(DB.allPlaces, (err, places) => {
                 if (err) reject(err);
                 resolve(places);
             }, (err) => {
@@ -215,45 +208,7 @@ function resetReviews(places) {
                 return;
             }
 
-            Review.insertMany([{
-                driverId: "0",
-                placeId: places[0]._id,
-                ratings: [{
-                    type: 1,
-                    rating: 4
-                }, {
-                    type: 2,
-                    rating: 4
-                }, {
-                    type: 3,
-                    rating: 3
-                }, {
-                    type: 4,
-                    rating: 3
-                }, {
-                    type: 5,
-                    rating: 5
-                }],
-            },{
-                driverId: "0",
-                placeId: places[1]._id,
-                ratings: [{
-                    type: 1,
-                    rating: 4
-                }, {
-                    type: 2,
-                    rating: 1
-                }, {
-                    type: 3,
-                    rating: 2
-                }, {
-                    type: 4,
-                    rating: 3
-                }, {
-                    type: 5,
-                    rating: 1
-                }],
-            }], (err, reviews) => {
+            Review.insertMany(DB.getAllReviews(places), (err, reviews) => {
                 if (err) {
                     console.log(err);
                     reject(err);
