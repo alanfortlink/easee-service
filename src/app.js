@@ -12,7 +12,7 @@ const config = {
     useUnifiedTopology: true
 };
 
-const uri = 'mongodb://service:service123@ds111420.mlab.com:11420/heroku_d54q9lwj';
+const uri = process.env.MONGODB_URI;
 
 // Connect to mongoose
 mongoose.connect(uri, config);
