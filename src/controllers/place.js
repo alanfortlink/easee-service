@@ -24,15 +24,15 @@ function getProcessedPlace(place, places, origin) {
             const numEvaluations = reviews.length;
             //TODO: Calculate rating from reviews accumulation
             const services = [{
-                id: 1,
+                type: 1,
                 name: "Wifi",
                 rating: 4
             }, {
-                id: 2,
+                type: 2,
                 name: "Estacionamento",
                 rating: 4
             }, {
-                id: 3,
+                type: 3,
                 name: "Banho",
                 rating: 4
             }];
@@ -168,19 +168,19 @@ function resetReviews(places) {
                 driverId: "0",
                 placeId: places[0]._id,
                 ratings: [{
-                    id: 1,
+                    type: 1,
                     rating: 4
                 }, {
-                    id: 2,
+                    type: 2,
                     rating: 4
                 }, {
-                    id: 3,
+                    type: 3,
                     rating: 3
                 }, {
-                    id: 4,
+                    type: 4,
                     rating: 3
                 }, {
-                    id: 5,
+                    type: 5,
                     rating: 5
                 }],
             }], (err, reviews) => {
