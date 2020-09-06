@@ -1,31 +1,32 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const ratingSchema = new Schema({
-    type: {
+const sensorModel = new Schema({
+    temperature: {
         type: Number,
         required: true,
         trim: true
     },
-    rating: {
+    humidity: {
         type: Number,
         required: true,
         trim: true
     },
-});
-
-const reviewModel = new Schema({
-    driverId: {
+    luminosity: {
+        type: Number,
+        required: true,
+        trim: true
+    },
+    source: {
         type: String,
         required: true,
         trim: true
     },
-    placeId: {
-        type: String,
+    created_at: {
+        type: Date,
         required: true,
-        trim: true
-    },
-    ratings: [ratingSchema]
+        default: Date.now
+    }
 });
 
-module.exports = mongoose.model('Review', reviewModel);
+module.exports = mongoose.model('Sensor', sensorModel);
