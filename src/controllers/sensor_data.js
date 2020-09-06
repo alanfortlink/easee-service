@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const DB = require('../models/db');
 const SensorData = mongoose.model('SensorData');
 
 exports.addSensorData = (req, res, next) => {

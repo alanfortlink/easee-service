@@ -29,4 +29,4 @@ const sensorModel = new Schema({
     }
 });
 
-module.exports = mongoose.model('Sensor', sensorModel);
+module.exports = mongoose.model('SensorData', sensorModel);

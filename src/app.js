@@ -18,18 +18,16 @@ const uri = process.env.MONGODB_URI;
 mongoose.connect(uri, config);
 
 // Load models.
-const Driver = require('./models/driver');
-const Place = require('./models/place');
-const Review = require('./models/review');
+const SensorData = require('./models/sensor_data');
 
 // Loading routes.
-const placeRoutes = require('./routes/place');
+const sensorRoutes = require('./routes/sensor_data');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: false
 }));
 
-app.use('/places', placeRoutes);
+app.use('/sensor', sensorRoutes);
 
 module.exports = app;
