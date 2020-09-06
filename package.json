@@ -1,5 +1,5 @@
 {
-  "name": "ccr-service",
+  "name": "easee-server",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alanfortlink/ccr-service.git"
+    "url": "git+https://github.com/alanfortlink/easee-server.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/alanfortlink/ccr-service/issues"
+    "url": "https://github.com/alanfortlink/easee-server/issues"
   },
-  "homepage": "https://github.com/alanfortlink/ccr-service#readme",
+  "homepage": "https://github.com/alanfortlink/easee-server#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
